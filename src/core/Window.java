@@ -1,5 +1,8 @@
 package core;
 
+import inputs.KeyboardHandler;
+import objects.Player;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
@@ -8,6 +11,10 @@ public class Window extends Canvas implements Runnable {
 
     private Thread thread;
     private boolean running = false;
+    private KeyboardHandler kListener = new KeyboardHandler(this);
+
+    // game object
+    public Player player = new Player(100,100,64,64);
 
     public Window(String title){
         JFrame frame = new JFrame(title);
@@ -35,7 +42,7 @@ public class Window extends Canvas implements Runnable {
         }
     }
 
-    //algothium calc FPS
+    //algothium calc FPS and logic game
     @Override
     public void run() {
         long lastTime = System.nanoTime();
@@ -69,7 +76,7 @@ public class Window extends Canvas implements Runnable {
     }
 
     public void tick(){
-
+        player.tick();
     }
 
     public void render(){
@@ -79,8 +86,12 @@ public class Window extends Canvas implements Runnable {
             bs = this.getBufferStrategy();
         }
         Graphics g = bs.getDrawGraphics();
-        g.setColor(Color.WHITE);
+        g.setColor(Color.PINK);
         g.fillRect(0,0,this.getWidth(),this.getHeight());
+
+        //====//
+        player.render(g);
+
 
         bs.show();
         g.dispose();
