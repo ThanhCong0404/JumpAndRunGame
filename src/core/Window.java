@@ -1,6 +1,7 @@
 package core;
 
 import inputs.KeyboardHandler;
+import level.LevelHandler;
 import objects.Player;
 
 import javax.swing.*;
@@ -12,9 +13,10 @@ public class Window extends Canvas implements Runnable {
     private Thread thread;
     private boolean running = false;
     private KeyboardHandler kListener = new KeyboardHandler(this);
+    public LevelHandler level = new LevelHandler();
 
     // game object
-    public Player player = new Player(100,100,64,64);
+    public Player player = new Player(this,100,100,42,42);
 
     public Window(String title){
         JFrame frame = new JFrame(title);
@@ -92,6 +94,8 @@ public class Window extends Canvas implements Runnable {
         //====//
         player.render(g);
 
+        g.setColor(Color.RED);
+        g.fillRect(0,300+41 , this.getWidth(),2);
 
         bs.show();
         g.dispose();
