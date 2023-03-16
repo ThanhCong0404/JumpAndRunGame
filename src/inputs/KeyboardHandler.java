@@ -23,16 +23,16 @@ public class KeyboardHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_D){
-            w.player.velx = w.player.speed;
+            w.level.player.velx = w.level.player.speed;
             movingLeft = false;
         }
         if(key == KeyEvent.VK_A){
-            w.player.velx = -w.player.speed;
+            w.level.player.velx = -w.level.player.speed;
             movingLeft = true;
         }
         if(key == KeyEvent.VK_W){
-            if(w.player.vely == 0){
-                w.player.vely = -w.player.jumpVelocity;
+            if(w.level.player.vely == 0){
+                w.level.player.vely = -w.level.player.jumpVelocity;
             }
         }
     }
@@ -41,10 +41,10 @@ public class KeyboardHandler implements KeyListener {
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_D && !movingLeft){
-            w.player.velx =0;
+            w.level.player.velx =0;
         }
         if(key == KeyEvent.VK_A && movingLeft){
-            w.player.velx =0;
+            w.level.player.velx =0;
         }
 
     }

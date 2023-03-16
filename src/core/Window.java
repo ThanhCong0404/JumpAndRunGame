@@ -13,10 +13,9 @@ public class Window extends Canvas implements Runnable {
     private Thread thread;
     private boolean running = false;
     private KeyboardHandler kListener = new KeyboardHandler(this);
-    public LevelHandler level = new LevelHandler();
+    public LevelHandler level = new LevelHandler(this);
 
     // game object
-    public Player player = new Player(this,100,100,42,42);
 
     public Window(String title){
         JFrame frame = new JFrame(title);
@@ -78,7 +77,6 @@ public class Window extends Canvas implements Runnable {
     }
 
     public void tick(){
-        player.tick();
         level.tick();
     }
 
@@ -93,7 +91,6 @@ public class Window extends Canvas implements Runnable {
         g.fillRect(0,0,this.getWidth(),this.getHeight());
 
         //====//
-        player.render(g);
         level.render(g);
 
         g.setColor(Color.RED);
