@@ -26,10 +26,11 @@ public class Player {
     public void tick(){
         x+= velx;
 
-        if(vely < w.level.gravity){
+        if(vely < w.level.gravity){ //jump up
             vely+= 0.1;
         }
-        if(y+vely < 300){
+
+        if(y+vely < 300){ // down
             y+=vely;
         }else{
             vely =0;

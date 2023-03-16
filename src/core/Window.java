@@ -79,6 +79,7 @@ public class Window extends Canvas implements Runnable {
 
     public void tick(){
         player.tick();
+        level.tick();
     }
 
     public void render(){
@@ -93,9 +94,10 @@ public class Window extends Canvas implements Runnable {
 
         //====//
         player.render(g);
+        level.render(g);
 
         g.setColor(Color.RED);
-        g.fillRect(0,300+41 , this.getWidth(),2);
+        g.fillRect(0,300+41 , this.getWidth(),5);
 
         bs.show();
         g.dispose();
