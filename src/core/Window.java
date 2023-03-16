@@ -2,14 +2,17 @@ package core;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.image.BufferStrategy;
 
 public class Window extends Canvas implements Runnable {
+
+    private Thread thread;
+    private boolean running = false;
 
     public Window(String title){
         JFrame frame = new JFrame(title);
 
         frame.setSize(800,600);
-
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setResizable(true);
@@ -17,8 +20,70 @@ public class Window extends Canvas implements Runnable {
         frame.add(this);
     }
 
+    public void start(){
+        running = true;
+        thread = new Thread(this);
+        thread.start();
+    }
+
+    public void stop(){
+        running = false;
+        try {
+            thread.join(); //stop
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    //algothium calc FPS
     @Override
     public void run() {
+        long lastTime = System.nanoTime();
+        double amountOfTicks = 60.0;
+        double ns = 1000000000 / amountOfTicks;
+        double delta = 0;
+        long timer = System.currentTimeMillis();
+        int updates =0;
+        int frames = 0;
+
+        while(running){
+            long now = System.nanoTime();
+            delta += (now - lastTime) / ns;
+            lastTime = now;
+            while(delta >= 1){
+                tick();
+                updates ++;
+                delta--;
+            }
+            render();
+            frames++;
+            if(System.currentTimeMillis() - timer > 1000){
+                timer += 1000;
+                System.out.println("FPS : " + frames +" ticks : " + updates);
+                frames =0;
+                updates=0;
+            }
+
+        }
+        stop();
+    }
+
+    public void tick(){
+
+    }
+
+    public void render(){
+        BufferStrategy bs = this.getBufferStrategy();
+        if(bs==null){
+            this.createBufferStrategy(2);
+            bs = this.getBufferStrategy();
+        }
+        Graphics g = bs.getDrawGraphics();
+        g.setColor(Color.WHITE);
+        g.fillRect(0,0,this.getWidth(),this.getHeight());
+
+        bs.show();
+        g.dispose();
 
     }
 }
