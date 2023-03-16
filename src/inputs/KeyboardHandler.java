@@ -30,6 +30,11 @@ public class KeyboardHandler implements KeyListener {
             w.player.velx = -w.player.speed;
             movingLeft = true;
         }
+        if(key == KeyEvent.VK_W){
+            if(w.player.vely == 0){
+                w.player.vely = -w.player.jumpVelocity;
+            }
+        }
     }
 
     @Override
