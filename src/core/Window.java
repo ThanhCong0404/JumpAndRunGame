@@ -93,8 +93,6 @@ public class Window extends Canvas implements Runnable {
         //====//
         level.render(g);
 
-        g.setColor(Color.RED);
-        g.fillRect(0,300+41 , this.getWidth(),5);
 
         bs.show();
         g.dispose();

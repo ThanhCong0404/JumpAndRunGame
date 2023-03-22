@@ -33,6 +33,7 @@ public class LevelHandler {
         items.add(new Platform(ObjectIDs.platform,100,100,200,2, Color.RED));
         items.add(new Platform(ObjectIDs.platform,400,100,200,2, Color.RED));
         items.add(new Platform(ObjectIDs.platform,600,300,200,2, Color.RED));
+        items.add(new Platform(ObjectIDs.platform,0,400,10000,2, Color.RED));
         items.add(new Spike(ObjectIDs.spike,300,100,22,22, Color.RED));
 
     }
