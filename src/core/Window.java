@@ -12,7 +12,7 @@ public class Window extends Canvas implements Runnable {
 
     private Thread thread;
     private boolean running = false;
-    private KeyboardHandler kListener = new KeyboardHandler(this);
+    public KeyboardHandler kListener = new KeyboardHandler(this);
     public LevelHandler level = new LevelHandler(this);
 
     // game object
