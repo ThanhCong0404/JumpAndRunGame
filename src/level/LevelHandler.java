@@ -47,7 +47,7 @@ public class LevelHandler {
     }
 
     public void tick(){
-        cameraX += 1;
+        cameraX += 0.1;
         for(Item i : items){
             i.tick();
         }

@@ -8,6 +8,7 @@ import java.awt.event.KeyListener;
 public class KeyboardHandler implements KeyListener {
 
     private Window w;
+    public boolean WDown = false;
     public KeyboardHandler(Window w) {
         this.w= w;
         w.addKeyListener(this);
@@ -31,8 +32,9 @@ public class KeyboardHandler implements KeyListener {
             movingLeft = true;
         }
         if(key == KeyEvent.VK_W){
-            if(w.level.player.vely == 0){
-                w.level.player.vely = -w.level.player.jumpVelocity;
+            if(w.level.player.Jumpable){
+//                w.level.player.vely = -w.level.player.jumpVelocity;
+                WDown = true;
             }
         }
     }
@@ -45,6 +47,9 @@ public class KeyboardHandler implements KeyListener {
         }
         if(key == KeyEvent.VK_A && movingLeft){
             w.level.player.velx =0;
+        }
+        if(key == KeyEvent.VK_W){
+            WDown = false;
         }
 
     }

@@ -14,6 +14,7 @@ public class Player {
     public double jumpVelocity = 4; // van toc,do cao nhay
 
     public boolean Falling = false; // sự rơi
+    public boolean Jumpable = false;
 
     public Player(Window w,int x,int y, int width , int height){
         this.w = w;
@@ -35,6 +36,11 @@ public class Player {
             vely = 0;
         }
 
+        //handle jumping
+        if(w.kListener.WDown && Jumpable){
+            vely = -jumpVelocity;
+        }
+
         Collisions();
 
 //        if(y+vely < 300){ // down
@@ -45,20 +51,37 @@ public class Player {
 
     public void Collisions(){ // xu ly va cham
         Falling = true;
+        Jumpable = false;
+
 
         for(Item i : w.level.items){
             if(i.id == ObjectIDs.platform){
                 Platform p = (Platform) i;
-                if(new Rectangle((int)x , (int)y + (int) vely,width,height).intersects(p.x,p.y,p.width,p.height)){ //intersect : diem giao
-                    if(vely > 0) Falling = false;
-                    if(vely > 0){ // xu ly vi tri khi da nhay len 1 platform , set vi tri truc y
-                        y = p.y - height;
-                    }
-                    if (vely < 0) { // xu ly va cham khi nhay len (vely so am la nhay)
+                // phat hien va cham cho platform
+                if(new Rectangle((int) (x+velx) , (int)y + (int) vely,width,height).intersects(p.x,p.y,p.width,p.height)){ //intersect : diem giao
 
+                    //stop falling
+                    if(y+height <= p.y+1){
+                        Falling = false;
+                        if(vely > 0){ // xu ly vi tri khi da nhay len 1 platform , set vi tri truc y
+                            vely= 0;
+                            y = p.y - height+1;
+                        }
+                    }else if( y < p.y ){ // dừng lại khi va chạm cạnh củab platform
+                        velx = 0;
+                    }
+
+                    if (vely < 0 && y > p.y) { // xu ly va cham khi nhay len (vely so am la nhay)
+                        Falling = true;
                         y-=(vely+1);
                         vely = -1 * vely; //dao nguoc huong
                     }
+                }
+
+                // phat hien va cham cho platform cho tuong lai
+                float CollisionTimeDetectionTicks = 20;
+                if(!Falling ||  ( Math.abs(y+height-p.y) <20 && new Rectangle((int)(x+velx* CollisionTimeDetectionTicks) , (int)(y+vely* CollisionTimeDetectionTicks),width,height).intersects(p.x,p.y,p.width,p.height))) { //intersect : diem giao
+                    Jumpable = true;
                 }
             }
         }
