@@ -62,13 +62,13 @@ public class Player {
                 if(new Rectangle((int) (x+velx) , (int)y + (int) vely,width,height).intersects(p.x,p.y,p.width,p.height)){ //intersect : diem giao
 
                     //stop falling
-                    if(y+height <= p.y+1){
+                    if(y+height <= p.y+1){ //chi khi > hon y platform+1 <=> đã đứng đc lên platform
                         Falling = false;
                         if(vely > 0){ // xu ly vi tri khi da nhay len 1 platform , set vi tri truc y
                             vely= 0;
                             y = p.y - height+1;
                         }
-                    }else if( y < p.y ){ // dừng lại khi va chạm cạnh củab platform
+                    }else if( y < p.y ){ // dừng lại khi va chạm cạnh của platform
                         velx = 0;
                     }
 
@@ -83,7 +83,7 @@ public class Player {
                 //khi gan roi khoi platform k cho phep nhay neu vi tri du kien k nam tren platform
                 float CollisionTimeDetectionTicks = 3; // dùng để tính toán vị trí của đối tượng hiện tại trong tương lai (toa do+ toc do * thoi gian vi tri du doan)
                 if(!Falling &&  ( Math.abs(y+height-p.y) < 20 && new Rectangle((int)(x+velx* CollisionTimeDetectionTicks) , (int)(y+vely* CollisionTimeDetectionTicks),width,height).intersects(p.x,p.y,p.width,p.height))) { //intersect : diem giao
-                    Jumpable = true; // được phép nhảy lên platform
+                    Jumpable = true; // được phép nhảy
                 }
             }
 
