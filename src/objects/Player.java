@@ -9,7 +9,7 @@ public class Player {
     public int width,height;
     public int speed = 3; //van toc di chuyen
     public double x,y;
-    public double velx , vely; // van toc,khoang cach moi lan di chuyen truc x , y
+    public double velx , vely; // van toc di chuyen truc x , y
 
     public double jumpVelocity = 4; // van toc,do cao nhay
 
@@ -30,10 +30,10 @@ public class Player {
         y+=vely;
 
 
-        if(vely < w.level.gravity && Falling ){ //jump up
+        if(vely < w.level.gravity && Falling ){ //falling
             vely+= 0.1;
         } else if(!Falling && vely > 0){
-            vely = 0;
+            vely = 0; //set lai van toc roi = 0
         }
 
         //handle jumping
@@ -79,10 +79,11 @@ public class Player {
                     }
                 }
 
-                // phat hien va cham cho platform cho tuong lai
-                float CollisionTimeDetectionTicks = 20;
-                if(!Falling ||  ( Math.abs(y+height-p.y) <20 && new Rectangle((int)(x+velx* CollisionTimeDetectionTicks) , (int)(y+vely* CollisionTimeDetectionTicks),width,height).intersects(p.x,p.y,p.width,p.height))) { //intersect : diem giao
-                    Jumpable = true;
+                // phat hien va cham cho platform o tuong lai
+                //khi gan roi khoi platform k cho phep nhay neu vi tri du kien k nam tren platform
+                float CollisionTimeDetectionTicks = 3; // dùng để tính toán vị trí của đối tượng hiện tại trong tương lai (toa do+ toc do * thoi gian vi tri du doan)
+                if(!Falling &&  ( Math.abs(y+height-p.y) < 20 && new Rectangle((int)(x+velx* CollisionTimeDetectionTicks) , (int)(y+vely* CollisionTimeDetectionTicks),width,height).intersects(p.x,p.y,p.width,p.height))) { //intersect : diem giao
+                    Jumpable = true; // được phép nhảy lên platform
                 }
             }
 
@@ -96,7 +97,11 @@ public class Player {
 
             //Goblin collision
             if(i.id == ObjectIDs.goblin){
-                if(new Rectangle( (int)i.x,(int)i.y,i.width,i.height).intersects(new Rectangle((int)x,(int)y,width,height))){
+
+                if(new Rectangle( (int)i.x,(int)i.y,i.width,i.height).intersects(new Rectangle((int)x+1,(int)y +height-1 ,width-2,1))){
+                    //attack
+                    w.level.items.remove(i);
+                }else if(new Rectangle( (int)i.x,(int)i.y,i.width,i.height).intersects(new Rectangle((int)x,(int)y,width,height))){
                     w.level.restartLevel();
                 }
             }
