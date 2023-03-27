@@ -89,7 +89,14 @@ public class Player {
             //Spike collisions
             if(i.id == ObjectIDs.spike){
                 Spike s = (Spike) i;
-                if(new Rectangle(s.x,s.y,s.width,s.height).intersects(new Rectangle((int)x,(int)y,width,height))){
+                if(new Rectangle( (int)s.x,(int)s.y,s.width,s.height).intersects(new Rectangle((int)x,(int)y,width,height))){
+                    w.level.restartLevel();
+                }
+            }
+
+            //Goblin collision
+            if(i.id == ObjectIDs.goblin){
+                if(new Rectangle( (int)i.x,(int)i.y,i.width,i.height).intersects(new Rectangle((int)x,(int)y,width,height))){
                     w.level.restartLevel();
                 }
             }
