@@ -16,6 +16,9 @@ public class Player {
     public boolean Falling = false; // sự rơi
     public boolean quickFall = false; // handle move down
     public boolean Jumpable = false;
+    public boolean doubleJumping =false;
+
+    public int jumpAirTime = 0; // thời gian ở trên không trung
 
     public Player(Window w,double x,double y, int width , int height){
         this.w = w;
@@ -33,7 +36,7 @@ public class Player {
         //logic trọng lực rơi sau khi jump
         double maxFallSpeed = (quickFall) ? w.level.gravity*2 : w.level.gravity;
         if(vely < maxFallSpeed && Falling ){ //falling
-            if(quickFall && vely < 0.5) vely =0.5; // set toc do bat dau cho khi move down
+            if(quickFall && vely < 0.5) vely =0.5; // set tốc độ bắt đầu rơi khi move down
             if(!quickFall) vely+= 0.1;
             if(quickFall) vely+= 0.5;
         } else if(!Falling && vely > 0){
@@ -41,8 +44,21 @@ public class Player {
         }
 
         //handle jumping
-        if(w.kListener.WDown && Jumpable){
-            vely = -jumpVelocity;
+        if(w.kListener.WDown){
+            if(Jumpable){ //neu đã dc phep jump
+                vely = -jumpVelocity;
+                System.out.println(vely);
+            }else if(!doubleJumping && jumpAirTime > 30){ // (nếu chưa nhảy đôi và sau 30 ticks)
+                vely= -jumpVelocity; // nhảy lần 2 (mỗi ticks y+= vely)
+                System.out.println(vely);
+
+                doubleJumping =true;
+            }
+        }
+
+        //check nếu đang trên không trung
+        if(Falling) {
+            jumpAirTime += 1;
         }
 
         Collisions();
@@ -67,8 +83,11 @@ public class Player {
 
                     //stop falling
                     if(y+height <= p.y+1){ //chi khi > hon y platform+1 <=> đã đứng đc lên platform
+                        // set variable when we hit the platform
                         Falling = false;
                         quickFall =false;
+                        doubleJumping = false;
+                        jumpAirTime =0;
 
                         if(vely > 0){ // xu ly vi tri khi da nhay len 1 platform , set vi tri truc y
                             vely= 0;
