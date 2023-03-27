@@ -18,13 +18,18 @@ public class LevelHandler {
     public int startingX = 100, startingY = 200;
 
     public double cameraX=0, cameraY=0;
-    public double cameraGain = 0.5; // toc do di chuyen camera
+    public double cameraGain = 1; // toc do di chuyen camera
 
     public Player player = null;
 
 
     public LevelHandler(Window w) {
         this.w = w;
+        generateLevel();
+    }
+
+    public void generateLevel(){
+        items = new LinkedList<Item>();
         //set random
         Random r = new Random();
         seed = r.nextInt();
@@ -32,16 +37,16 @@ public class LevelHandler {
         //add in player
         player = new Player( w ,startingX,startingY,42,42);
 
-
         //generate level
         items.add(new Platform(ObjectIDs.platform,100,100,200,2, Color.BLUE));
         items.add(new Platform(ObjectIDs.platform,400,100,200,2, Color.BLUE));
         items.add(new Platform(ObjectIDs.platform,600,300,200,2, Color.BLUE));
-        items.add(new Platform(ObjectIDs.platform,0,400,10000,5, Color.BLUE));
+        items.add(new Platform(ObjectIDs.platform,0,400,1000,5, Color.BLUE));
         items.add(new Spike(ObjectIDs.spike,300,400-32,32,32, Color.BLUE));
         items.add(new Spike(ObjectIDs.spike,340,400-32,32,32, Color.BLUE));
-
+        items.add(new Goblin(w,ObjectIDs.goblin,340,300-24,24,24,3));
     }
+
     public void render(Graphics g){
         g.translate(-(int)cameraX,-(int)cameraY);
         for(Item i : items){
@@ -64,5 +69,7 @@ public class LevelHandler {
         player.y = startingY;
         cameraX = 0;
         cameraY = 0;
+
+        generateLevel(); // khoi tao lai man choi
     }
 }

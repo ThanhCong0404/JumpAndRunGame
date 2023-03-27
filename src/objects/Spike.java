@@ -3,14 +3,15 @@ package objects;
 import java.awt.*;
 
 public class Spike extends Item{
-    public int x,y,width,height;
+
     public Color c;
 
     public int[] PolyX = new int[3],PolyY = new int[3];
     public Polygon p; //đa giác
 
     public Spike(byte id, int x, int y, int width, int height, Color c) {
-        super(id);
+        super(id,x,y,width,height);
+
         PolyX[0] = x;
         PolyX[1] = x+width/2;
         PolyX[2] = x+width;
@@ -21,10 +22,7 @@ public class Spike extends Item{
 
         p = new Polygon(PolyX,PolyY,3);
 
-        this.x = x;
-        this.y = y;
-        this.width = width;
-        this.height = height;
+
         this.c = c;
     }
     @Override
