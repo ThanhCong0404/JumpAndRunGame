@@ -43,7 +43,7 @@ public class KeyboardHandler implements KeyListener {
                 if(w.level.player.vely < 0){ // stop jump
                     w.level.player.vely = 0;
                 }else{ //going down
-                    w.level.player.vely = w.level.gravity *2;
+                    w.level.player.quickFall = true;
                 }
             }
         }
