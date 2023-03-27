@@ -37,6 +37,16 @@ public class KeyboardHandler implements KeyListener {
                 WDown = true;
             }
         }
+
+        if(key == KeyEvent.VK_S){
+            if(w.level.player.Falling){
+                if(w.level.player.vely < 0){ // stop jump
+                    w.level.player.vely = 0;
+                }else{ //going down
+                    w.level.player.vely = w.level.gravity *2;
+                }
+            }
+        }
     }
 
     @Override
@@ -51,6 +61,7 @@ public class KeyboardHandler implements KeyListener {
         if(key == KeyEvent.VK_W){
             WDown = false;
         }
+
 
     }
 }
