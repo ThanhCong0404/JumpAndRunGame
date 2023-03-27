@@ -32,10 +32,7 @@ public class KeyboardHandler implements KeyListener {
             movingLeft = true;
         }
         if(key == KeyEvent.VK_W){
-            if(w.level.player.Jumpable){ // khi nao dc phep nhay moi set nhan W
-//                w.level.player.vely = -w.level.player.jumpVelocity;
                 WDown = true;
-            }
         }
 
         if(key == KeyEvent.VK_S){
