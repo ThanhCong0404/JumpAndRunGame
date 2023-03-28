@@ -7,7 +7,7 @@ import java.awt.*;
 public class Player {
     public Window w;
     public int width,height;
-    public int speed = 3; //van toc di chuyen
+    public int baseSpeed = 3; //van toc di chuyen player
     public double x,y;
     public double velx , vely; // van toc di chuyen truc x , y mỗi tick();
 
@@ -61,6 +61,11 @@ public class Player {
         //check nếu đang trên không trung
         if(Falling) {
             jumpAirTime += 1;
+        }
+
+        //restart level in case die;
+        if(y> Window.height){
+            w.level.restartLevel();
         }
 
         Collisions();
@@ -152,6 +157,11 @@ public class Player {
                 }
             }
         }
+    }
+
+    // return real speed of player
+    public double realSpeed(){
+        return baseSpeed * w.level.gameSpeed;
     }
 
     public void render(Graphics g ){

@@ -24,11 +24,11 @@ public class KeyboardHandler implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if(key == KeyEvent.VK_D && w.level.player.canMoveRight){
-            w.level.player.velx = w.level.player.speed;
+            w.level.player.velx = w.level.player.realSpeed();
             movingLeft = false;
         }
         if(key == KeyEvent.VK_A && w.level.player.canMoveLeft){
-            w.level.player.velx = -w.level.player.speed;
+            w.level.player.velx = -w.level.player.realSpeed();
             movingLeft = true;
         }
         if(key == KeyEvent.VK_W){

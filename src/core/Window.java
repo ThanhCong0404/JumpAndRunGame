@@ -13,6 +13,8 @@ public class Window extends Canvas implements Runnable {
     private Thread thread;
     private boolean running = false;
     public KeyboardHandler kListener = new KeyboardHandler(this);
+
+    public static final int width = 800 , height = 600;
     public LevelHandler level;
 
     // game object
@@ -20,7 +22,7 @@ public class Window extends Canvas implements Runnable {
     public Window(String title){
         JFrame frame = new JFrame(title);
 
-        frame.setSize(800,600);
+        frame.setSize(width,height);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
         frame.setResizable(true);
