@@ -43,31 +43,33 @@ public class Window extends Canvas implements Runnable {
         }
     }
 
-    //algothium calc FPS and logic game
+    //algothium calc fps and logic game
     @Override
     public void run() {
-        long lastTime = System.nanoTime();
-        double amountOfTicks = 60.0;
-        double ns = 1000000000 / amountOfTicks;
-        double delta = 0;
-        long timer = System.currentTimeMillis();
-        int updates =0;
-        int frames = 0;
+        long lastTime = System.nanoTime(); // thời gian lần cập nhật trước nanosecond.
+        double amountOfTicks = 60.0; // số lần cập nhật(tick) trong một giây (tick /second)
+        double ns = 1000000000 / amountOfTicks; // tính khoảng thời gian giữa mỗi lần cập nhật(tick()) theo đơn vị nanosecond, chia 1 giây (10^9) cho số lượng tick trong một giây
+        double delta = 0; //lưu trữ số lượng thời gian đã trôi qua giữa các lần cập nhật
+        long timer = System.currentTimeMillis(); //gán tạm 1 giá trị thời gian trả về để làm mốc
+        int updates =0; // số lần cập nhật
+        int frames = 0; //số khung hình được vẽ
 
         while(running){
             long now = System.nanoTime();
-            delta += (now - lastTime) / ns;
+            delta += (now - lastTime) / ns; //delta sẽ được cộng với thời gian trôi qua giữa lần cập nhật trước và lần cập nhật hiện tại chia cho ns, để tính toán số lần cập nhật(tick) cần thực hiện
             lastTime = now;
+            // đồng bộ giữa hai hoạt động là "tick" và "render"
             while(delta >= 1){
                 tick();
                 updates ++;
-                delta--;
+                delta--; //giảm delta xuống 1 để tiếp tục cập nhật cho lần tiếp theo
             }
             render();
+
             frames++;
-            if(System.currentTimeMillis() - timer > 1000){
+            if(System.currentTimeMillis() - timer > 1000){ //  đo số lượng updates và frames đã được thực hiện trong 1 giây.
                 timer += 1000;
-                System.out.println("FPS : " + frames +" ticks : " + updates);
+                System.out.println("fps : " + frames +" ticks : " + updates);
                 frames =0;
                 updates=0;
             }
@@ -91,6 +93,7 @@ public class Window extends Canvas implements Runnable {
         g.fillRect(0,0,this.getWidth(),this.getHeight());
 
         //====//
+        //render màn  chơi
         level.render(g);
 
 
