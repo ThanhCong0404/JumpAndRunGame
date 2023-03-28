@@ -13,6 +13,8 @@ public class LevelHandler {
     public double gravity = 4;
 
     public LinkedList<Item> items = new LinkedList<Item>();
+
+    public LinkedList<Item> removing = new LinkedList<Item>();
     private int seed;
 
     public int startingX = 100, startingY = 200;
@@ -98,7 +100,15 @@ public class LevelHandler {
         for(Item i : items){
             i.tick();
         }
+        for(Item i : removing){
+            items.remove(i);
+        }
         player.tick();
+    }
+
+    //remove items from the game
+    public void removeItem (Item i){
+        removing.add(i);
     }
 
     public void restartLevel() {
