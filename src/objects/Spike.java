@@ -28,7 +28,7 @@ public class Spike extends Item{
     @Override
     public void render(Graphics g) {
         g.setColor(c);
-        g.drawPolygon(p);
+        g.fillPolygon(p);
     }
 
     @Override

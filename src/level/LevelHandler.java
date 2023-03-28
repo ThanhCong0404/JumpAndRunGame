@@ -18,7 +18,7 @@ public class LevelHandler {
     public int startingX = 100, startingY = 200;
 
     public double cameraX=0, cameraY=0;
-    public double cameraGain = 1; // toc do di chuyen camera
+    public double gameSpeed = 1;
 
     public int lastestSectorX = 0; //toa do x khu vuc moi nhat
     public int sectorWidth = 0;
@@ -28,7 +28,7 @@ public class LevelHandler {
 
     public LevelHandler(Window w) {
         this.w = w;
-        this.sectorWidth = w.getWidth()*2; //set độ dài cho sector
+        this.sectorWidth = Window.width*2; //set độ dài cho sector
         generateLevel();
     }
 
@@ -44,19 +44,35 @@ public class LevelHandler {
         generateSector(0,sectorWidth);
     }
 
-    //tạo khu vực tiếp theo cho player
+    //generate khu vực(vùng chơi) tiếp theo cho player
     public void generateSector(int sectorX,int sectorWidth){
-        lastestSectorX = sectorX;
+        lastestSectorX = sectorX+sectorWidth; //set lai toa do x cuối của khu vực chơi dc generate sau cùng
         //generate platform
         for(int x = sectorX; x < sectorX+sectorWidth ;x++){
             int maxW = 600, minW =100;
             Random r = new Random();
+            //add platform
             int w = r.nextInt(maxW-minW) + minW;
-            items.add(new Platform(ObjectIDs.platform,x,400,w,2,Color.BLUE));
+            int y = 400 - r.nextInt(100);
+            items.add(new Platform(ObjectIDs.platform,x,y,w,2,Color.BLUE));
+            //add in spikes
+            int spikeChance = 2; // để tính tỉ lệ xuất hiện
+            if(r.nextInt(spikeChance) == 0){
+                int spikeW = 32;
+                int maxSpikes = w/spikeW; // tối đa 1 platform có thể chứa số lượng spike
+                int amountOfSpikes = r.nextInt(maxSpikes);
+                if(amountOfSpikes != 0){
+                    for(int spikeX = x+spikeW; spikeX < x+w-spikeW; spikeX+= w/amountOfSpikes){ //spkeX +=w/amountOfSpikes : để chia đều vị trí spike trên platform
+                        if(r.nextBoolean()) { //tránh trường hợp không có chổ đứng
+                            items.add(new Spike(ObjectIDs.spike,spikeX,y-32,32,32,new Color(r.nextInt(255),r.nextInt(255),r.nextInt(255)) ));
+                        }
+                    }
+                }
+            }
 
             //generate khoảng trống nối tiếp platform
             int maxG = 300 , minG = 20;
-            int nextPlatformGap = w + new Random().nextInt(maxG-minG) + minG;
+            int nextPlatformGap = w + r.nextInt(maxG-minG) + minG;
             x+=nextPlatformGap;
         }
 
@@ -72,7 +88,9 @@ public class LevelHandler {
     }
 
     public void tick(){
-        cameraX += cameraGain;
+        gameSpeed += 0.005;
+        cameraX += gameSpeed;
+
         if(cameraX+ sectorWidth > lastestSectorX){ //tao ra vô hạn khu vực tiếp theo
             generateSector(lastestSectorX,sectorWidth);
         }
@@ -88,6 +106,7 @@ public class LevelHandler {
         player.y = startingY;
         cameraX = 0;
         cameraY = 0;
+        gameSpeed = 1;
 
         generateLevel(); // khoi tao lai man choi
     }
