@@ -13,7 +13,7 @@ public class Window extends Canvas implements Runnable {
     private Thread thread;
     private boolean running = false;
     public KeyboardHandler kListener = new KeyboardHandler(this);
-    public LevelHandler level = new LevelHandler(this);
+    public LevelHandler level;
 
     // game object
 
@@ -26,6 +26,8 @@ public class Window extends Canvas implements Runnable {
         frame.setResizable(true);
         frame.setVisible(true);
         frame.add(this);
+
+        level = new LevelHandler(this);
     }
 
     public void start(){
@@ -51,8 +53,8 @@ public class Window extends Canvas implements Runnable {
         double ns = 1000000000 / amountOfTicks; // tính khoảng thời gian giữa mỗi lần cập nhật(tick()) theo đơn vị nanosecond, chia 1 giây (10^9) cho số lượng tick trong một giây
         double delta = 0; //lưu trữ số lượng thời gian đã trôi qua giữa các lần cập nhật
         long timer = System.currentTimeMillis(); //gán tạm 1 giá trị thời gian trả về để làm mốc
-        int updates =0; // số lần cập nhật
-        int frames = 0; //số khung hình được vẽ
+        int updates =0; // số lần cập nhật,tick()
+        int frames = 0; //số khung hình được vẽ trong 1s
 
         while(running){
             long now = System.nanoTime();
@@ -61,8 +63,8 @@ public class Window extends Canvas implements Runnable {
             // đồng bộ giữa hai hoạt động là "tick" và "render"
             while(delta >= 1){
                 tick();
-                updates ++;
-                delta--; //giảm delta xuống 1 để tiếp tục cập nhật cho lần tiếp theo
+                updates++;
+                delta--; //giảm delta xuống 1 để tiếp tục update cho lần tiếp theo
             }
             render();
 
