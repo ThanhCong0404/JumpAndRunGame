@@ -9,7 +9,7 @@ public class Player {
     public int width,height;
     public int speed = 3; //van toc di chuyen
     public double x,y;
-    public double velx , vely; // van toc di chuyen truc x , y
+    public double velx , vely; // van toc di chuyen truc x , y mỗi tick();
 
     public double jumpVelocity = 4; // van toc,do cao nhay
 
@@ -18,7 +18,11 @@ public class Player {
     public boolean Jumpable = false;
     public boolean doubleJumping =false;
 
+    public boolean canMoveLeft = false, canMoveRight = false;
+
     public int jumpAirTime = 0; // thời gian ở trên không trung
+
+
 
     public Player(Window w,double x,double y, int width , int height){
         this.w = w;
@@ -47,10 +51,8 @@ public class Player {
         if(w.kListener.WDown){
             if(Jumpable){ //neu đã dc phep jump
                 vely = -jumpVelocity;
-                System.out.println(vely);
             }else if(!doubleJumping && jumpAirTime > 30){ // (nếu chưa nhảy đôi và sau 30 ticks)
                 vely= -jumpVelocity; // nhảy lần 2 (mỗi ticks y+= vely)
-                System.out.println(vely);
 
                 doubleJumping =true;
             }
@@ -72,6 +74,8 @@ public class Player {
     public void Collisions(){ // xu ly va cham
         Falling = true;
         Jumpable = false;
+        canMoveRight=true;
+        canMoveLeft=true;
 
 
         for(Item i : w.level.items){
@@ -79,8 +83,10 @@ public class Player {
             if(i.id == ObjectIDs.platform){
                 Platform p = (Platform) i;
                 // phat hien va cham cho platform
-                if(new Rectangle((int) (x+velx) , (int)y + (int) vely,width,height).intersects(p.x,p.y,p.width,p.height)){ //intersect : diem giao
+                Rectangle playerRectangle = new Rectangle((int) (x+velx) , (int)y + (int) vely,width,height);
+                if(playerRectangle.intersects(p.x,p.y,p.width,p.height)){ //intersect : diem giao
 
+                    //VELY
                     //stop falling
                     if(y+height <= p.y+1){ //chi khi > hon y platform+1 <=> đã đứng đc lên platform
                         // set variable when we hit the platform
@@ -93,7 +99,7 @@ public class Player {
                             vely= 0;
                             y = p.y - height+1;
                         }
-                    }else if( y < p.y ){ // dừng lại khi va chạm cạnh của platform
+                    }else if( y < p.y ){ // dừng lại khi không nhảy quay khỏi đc platform
                         velx = 0;
                     }
 
@@ -102,6 +108,21 @@ public class Player {
                         y-=(vely+1);
                         vely = -1 * vely; //dao nguoc huong
                     }
+                    //End VELY
+
+                    //VElX
+                    if(playerRectangle.intersects(p.x,p.y+1,p.width,p.height-2)){
+                        // dừng di chuyển nếu platform cản đường
+                        if(p.x + p.width <= x ){
+                            canMoveLeft = false;
+                            velx = 0;
+                        }
+                        if(p.x >= x+width){
+                            canMoveRight = false;
+                            velx = 0;
+                        }
+                    }
+                    //End VELX
                 }
 
                 // phat hien va cham cho platform o tuong lai
