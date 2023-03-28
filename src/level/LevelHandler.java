@@ -20,11 +20,15 @@ public class LevelHandler {
     public double cameraX=0, cameraY=0;
     public double cameraGain = 1; // toc do di chuyen camera
 
+    public int lastestSectorX = 0; //toa do x khu vuc moi nhat
+    public int sectorWidth = 0;
+
     public Player player = null;
 
 
     public LevelHandler(Window w) {
         this.w = w;
+        this.sectorWidth = w.getWidth()*2; //set độ dài cho sector
         generateLevel();
     }
 
@@ -37,15 +41,25 @@ public class LevelHandler {
         //add in player
         player = new Player( w ,startingX,startingY,42,42);
 
-        //generate level
-        items.add(new Platform(ObjectIDs.platform,100,100,200,2, Color.BLUE));
-        items.add(new Platform(ObjectIDs.platform,400,100,200,2, Color.BLUE));
-        items.add(new Platform(ObjectIDs.platform,600,300,200,2, Color.BLUE));
-        items.add(new Platform(ObjectIDs.platform,400,100,2,200, Color.BLUE));
-        items.add(new Platform(ObjectIDs.platform,0,400,1000,5, Color.BLUE));
-        items.add(new Spike(ObjectIDs.spike,300,400-32,32,32, Color.BLUE));
-        items.add(new Spike(ObjectIDs.spike,340,400-32,32,32, Color.BLUE));
-        items.add(new Goblin(w,ObjectIDs.goblin,340,300-24,24,24,3));
+        generateSector(0,sectorWidth);
+    }
+
+    //tạo khu vực tiếp theo cho player
+    public void generateSector(int sectorX,int sectorWidth){
+        lastestSectorX = sectorX;
+        //generate platform
+        for(int x = sectorX; x < sectorX+sectorWidth ;x++){
+            int maxW = 600, minW =100;
+            Random r = new Random();
+            int w = r.nextInt(maxW-minW) + minW;
+            items.add(new Platform(ObjectIDs.platform,x,400,w,2,Color.BLUE));
+
+            //generate khoảng trống nối tiếp platform
+            int maxG = 300 , minG = 20;
+            int nextPlatformGap = w + new Random().nextInt(maxG-minG) + minG;
+            x+=nextPlatformGap;
+        }
+
     }
 
     public void render(Graphics g){
@@ -59,6 +73,10 @@ public class LevelHandler {
 
     public void tick(){
         cameraX += cameraGain;
+        if(cameraX+ sectorWidth > lastestSectorX){ //tao ra vô hạn khu vực tiếp theo
+            generateSector(lastestSectorX,sectorWidth);
+        }
+
         for(Item i : items){
             i.tick();
         }
