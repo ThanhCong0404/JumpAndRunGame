@@ -3,7 +3,7 @@ import level.LevelHandler;
 
 import java.awt.*;
 //animation dấu vết kí tự cho player
-// vệ lưu bóng mờ dần đến khi mất removing
+// vệt lưu bóng mờ dần đến khi mất and removing
 public class CharacterTrail extends Item{
     public double opacity = 255;
     public LevelHandler level;

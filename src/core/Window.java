@@ -1,6 +1,7 @@
 package core;
 
 import inputs.KeyboardHandler;
+import inputs.SoundHandler;
 import level.LevelHandler;
 import objects.Player;
 
@@ -30,6 +31,9 @@ public class Window extends Canvas implements Runnable {
         frame.add(this);
 
         level = new LevelHandler(this);
+
+        //start music
+        SoundHandler.RunMusic("src/res/music.wav");
     }
 
     public void start(){
