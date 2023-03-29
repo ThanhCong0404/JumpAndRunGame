@@ -70,6 +70,10 @@ public class LevelHandler {
                         }
                     }
                 }
+            }else { //generate goblin
+                if(r.nextBoolean()) { //tránh trường hợp không có chổ đứng
+                    items.add(new Goblin(this.w,ObjectIDs.goblin,x+30,y-30,30,30, player.baseSpeed));
+                }
             }
 
             //generate khoảng trống nối tiếp platform
