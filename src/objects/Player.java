@@ -21,6 +21,7 @@ public class Player {
     public boolean canMoveLeft = false, canMoveRight = false;
 
     public int jumpAirTime = 0; // thời gian ở trên không trung
+    public byte trailTimer ;
 
 
 
@@ -36,6 +37,13 @@ public class Player {
     public void tick(){
         x+= velx;
         y+=vely;
+
+        //handle animation Character Trail for player
+        trailTimer +=1;
+        if(trailTimer >2){
+            trailTimer =0;
+            w.level.items.add(new CharacterTrail(ObjectIDs.characterTrail,w.level,x,y,width,height));
+        }
 
         //logic trọng lực rơi sau khi jump
         double maxFallSpeed = (quickFall) ? w.level.gravity*2 : w.level.gravity;
@@ -65,7 +73,7 @@ public class Player {
 
         //restart level in case die;
         if(y> Window.height){
-            w.level.restartLevel();
+            w.level.loseGame();
         }
 
         Collisions();
@@ -142,7 +150,7 @@ public class Player {
             if(i.id == ObjectIDs.spike){
                 Spike s = (Spike) i;
                 if(new Rectangle( (int)s.x,(int)s.y,s.width,s.height).intersects(new Rectangle((int)x,(int)y,width,height))){
-                    w.level.restartLevel();
+                    w.level.loseGame();
                 }
             }
 
@@ -151,9 +159,9 @@ public class Player {
 
                 if(new Rectangle( (int)i.x,(int)i.y,i.width,i.height).intersects(new Rectangle((int)x+1,(int)y +height-1 ,width-2,1))){
                     //attack
-                    w.level.items.remove(i);
+                    w.level.removeItem(i);
                 }else if(new Rectangle( (int)i.x,(int)i.y,i.width,i.height).intersects(new Rectangle((int)x,(int)y,width,height))){
-                    w.level.restartLevel();
+                    w.level.loseGame();
                 }
             }
         }

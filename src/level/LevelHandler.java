@@ -1,5 +1,6 @@
 package level;
 
+import core.GameState;
 import core.Window;
 import objects.*;
 
@@ -13,6 +14,8 @@ public class LevelHandler {
     public double gravity = 4;
 
     public LinkedList<Item> items = new LinkedList<Item>();
+
+    public LinkedList<Item> removing = new LinkedList<Item>();
     private int seed;
 
     public int startingX = 100, startingY = 200;
@@ -29,7 +32,6 @@ public class LevelHandler {
     public LevelHandler(Window w) {
         this.w = w;
         this.sectorWidth = Window.width*2; //set độ dài cho sector
-        generateLevel();
     }
 
     public void generateLevel(){
@@ -83,8 +85,20 @@ public class LevelHandler {
         for(Item i : items){
             i.render(g);
         }
-        player.render(g);
+        if(player!=null) player.render(g);
+
         g.translate((int)cameraX,(int)cameraY);
+
+        //render game over menu
+        if(w.gs == GameState.GameOver){
+            g.setColor(Color.black);
+            FontMetrics fontMetrics = g.getFontMetrics(g.getFont());
+            g.drawString("GAME OVER!!!", Window.width/2-fontMetrics.stringWidth("GAME OVER!!!")/2,Window.height/2);
+            g.drawString("Nhấm phím Space để tiếp tục...", Window.width/2-fontMetrics.stringWidth("Nhấm phím Space để tiếp tục...")/2,Window.height/2+64);
+
+
+        }
+
     }
 
     public void tick(){
@@ -98,16 +112,31 @@ public class LevelHandler {
         for(Item i : items){
             i.tick();
         }
-        player.tick();
+        for(Item i : removing){
+            items.remove(i);
+        }
+        if(player!=null) player.tick();
+    }
+
+    //remove items from the game
+    public void removeItem (Item i){
+        removing.add(i);
+    }
+
+    public void loseGame(){
+        w.gs = GameState.GameOver;
     }
 
     public void restartLevel() {
+
+        generateLevel(); // khoi tao lai man choi
+
         player.x = startingX;
         player.y = startingY;
         cameraX = 0;
         cameraY = 0;
         gameSpeed = 1;
 
-        generateLevel(); // khoi tao lai man choi
+        w.gs = GameState.Game;
     }
 }

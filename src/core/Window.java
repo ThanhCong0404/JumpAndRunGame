@@ -1,8 +1,11 @@
 package core;
 
 import inputs.KeyboardHandler;
+import inputs.SoundHandler;
 import level.LevelHandler;
 import objects.Player;
+import ui.MenuHandler;
+import ui.OptionHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,8 +19,10 @@ public class Window extends Canvas implements Runnable {
 
     public static final int width = 800 , height = 600;
     public LevelHandler level;
+    public MenuHandler menu = new MenuHandler(this);
+    public OptionHandler options = new OptionHandler(this);
 
-    // game object
+    public GameState gs = GameState.Menu;
 
     public Window(String title){
         JFrame frame = new JFrame(title);
@@ -30,6 +35,7 @@ public class Window extends Canvas implements Runnable {
         frame.add(this);
 
         level = new LevelHandler(this);
+
     }
 
     public void start(){
@@ -83,7 +89,9 @@ public class Window extends Canvas implements Runnable {
     }
 
     public void tick(){
-        level.tick();
+        if(gs == GameState.Game || gs == GameState.GameOver) level.tick();
+        if(gs== GameState.Menu) menu.tick();
+        if(gs== GameState.Options) options.tick();
     }
 
     public void render(){
@@ -97,12 +105,25 @@ public class Window extends Canvas implements Runnable {
         g.fillRect(0,0,this.getWidth(),this.getHeight());
 
         //====//
-        //render màn  chơi
-        level.render(g);
+
+        if(gs == GameState.Game || gs == GameState.GameOver) level.render(g); //render màn  chơi
+        if(gs== GameState.Menu) menu.render(g);
+        if(gs== GameState.Options) options.render(g);
 
 
         bs.show();
         g.dispose();
 
+    }
+
+    //go from menu to game
+    public void GotoGame() {
+
+        level.restartLevel();
+        level.generateLevel(); // generate game
+        gs= GameState.Game;
+
+        //start music
+        SoundHandler.RunMusic("src/res/music.wav");
     }
 }
