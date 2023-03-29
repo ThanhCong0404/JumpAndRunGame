@@ -73,7 +73,7 @@ public class Player {
 
         //restart level in case die;
         if(y> Window.height){
-            w.level.restartLevel();
+            w.level.loseGame();
         }
 
         Collisions();
@@ -150,7 +150,7 @@ public class Player {
             if(i.id == ObjectIDs.spike){
                 Spike s = (Spike) i;
                 if(new Rectangle( (int)s.x,(int)s.y,s.width,s.height).intersects(new Rectangle((int)x,(int)y,width,height))){
-                    w.level.restartLevel();
+                    w.level.loseGame();
                 }
             }
 
@@ -161,7 +161,7 @@ public class Player {
                     //attack
                     w.level.removeItem(i);
                 }else if(new Rectangle( (int)i.x,(int)i.y,i.width,i.height).intersects(new Rectangle((int)x,(int)y,width,height))){
-                    w.level.restartLevel();
+                    w.level.loseGame();
                 }
             }
         }
