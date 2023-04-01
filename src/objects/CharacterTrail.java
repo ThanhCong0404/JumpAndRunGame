@@ -14,7 +14,7 @@ public class CharacterTrail extends Item{
 
     @Override
     public void render(Graphics g) {
-        g.setColor(new Color(255,255,255,(int)opacity));
+        g.setColor(new Color(255,0,0,(int)opacity));
         g.fillRect((int)x,(int)y,width,height);
     }
 

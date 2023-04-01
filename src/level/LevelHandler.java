@@ -18,6 +18,8 @@ public class LevelHandler {
     public LinkedList<Item> removing = new LinkedList<Item>();
     private int seed;
 
+    public static double score = 0;
+
     public int startingX = 100, startingY = 200;
 
     public double cameraX=0, cameraY=0;
@@ -56,7 +58,7 @@ public class LevelHandler {
             //add platform
             int w = r.nextInt(maxW-minW) + minW;
             int y = 400 - r.nextInt(100);
-            items.add(new Platform(ObjectIDs.platform,x,y,w,2,Color.BLUE));
+            items.add(new Platform(ObjectIDs.platform,x,y,w,10,Color.BLUE));
             //add in spikes
             int spikeChance = 2; // để tính tỉ lệ xuất hiện
             if(r.nextInt(spikeChance) == 0){
@@ -93,11 +95,21 @@ public class LevelHandler {
 
         g.translate((int)cameraX,(int)cameraY);
 
+
+        if(w.gs == GameState.Game) { // tính điểm and render điểm
+            score += 0.01;
+            g.setColor(Color.RED);
+            g.setFont(new Font("Times New Roman", Font.BOLD, 24));
+            FontMetrics fontMetrics = g.getFontMetrics(g.getFont());
+            g.drawString("Điểm :" +(int)score, Window.width-fontMetrics.stringWidth("Điểm :" +(int)score)*2,30);
+
+        }
+
         //render game over menu
         if(w.gs == GameState.GameOver){
             g.setColor(Color.black);
             FontMetrics fontMetrics = g.getFontMetrics(g.getFont());
-            g.drawString("GAME OVER!!!", Window.width/2-fontMetrics.stringWidth("GAME OVER!!!")/2,Window.height/2);
+            g.drawString("GAME OVER!!! Điểm của bạn là : " +(int)score, Window.width/2-fontMetrics.stringWidth("GAME OVER!!! Điểm của bạn là : " +(int)score)/2,Window.height/2);
             g.drawString("Nhấm phím Space để tiếp tục...", Window.width/2-fontMetrics.stringWidth("Nhấm phím Space để tiếp tục...")/2,Window.height/2+64);
 
 
@@ -108,6 +120,7 @@ public class LevelHandler {
     public void tick(){
         gameSpeed += 0.005;
         cameraX += gameSpeed;
+
 
         if(cameraX+ sectorWidth > lastestSectorX){ //tao ra vô hạn khu vực tiếp theo
             generateSector(lastestSectorX,sectorWidth);
@@ -140,6 +153,8 @@ public class LevelHandler {
         cameraX = 0;
         cameraY = 0;
         gameSpeed = 1;
+
+        score = 0;
 
         w.gs = GameState.Game;
     }
