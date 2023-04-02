@@ -7,7 +7,7 @@ import java.awt.*;
 public class Player {
     public Window w;
     public int width,height;
-    public int baseSpeed = 3; //van toc di chuyen player
+    public int baseSpeed = 2; //van toc di chuyen player
     public double x,y;
     public double velx , vely; // van toc di chuyen truc x , y mỗi tick();
 

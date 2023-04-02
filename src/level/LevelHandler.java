@@ -88,7 +88,7 @@ public class LevelHandler {
 
     public void render(Graphics g){
         g.translate(-(int)cameraX,-(int)cameraY);
-        for(Item i : items){
+        if(items.size() > 0 )for(Item i : items){
             i.render(g);
         }
         if(player!=null) player.render(g);
