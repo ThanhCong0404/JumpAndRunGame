@@ -14,7 +14,7 @@ public class Platform extends Item {
     @Override
     public void render(Graphics g) {
         g.setColor(c);
-        g.fillRect((int)x,(int)y,width,height);
+        g.fillRoundRect((int)x,(int)y,width,height,12,12); // thêm bo góc
     }
 
     @Override
